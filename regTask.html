@@ -1,0 +1,189 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        form {
+            display: inline-block;
+            padding: 25px;
+            border: 2px solid blue;
+            border-radius: 10px;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        table {
+            margin: 30px auto;
+            border-collapse: collapse;
+            width: 70%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        th {
+            background-color: lightgray;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Registration Form</h1>
+
+    <form onsubmit="registerUser(event)">
+
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Enter your name">
+        <br><br>
+
+        <label>Date of Birth</label>
+        <input type="date" id="dob">
+        <br><br>
+
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter your email">
+        <br><br>
+
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter your password">
+        <br><br>
+
+        <button type="submit">Register</button>
+
+    </form>
+
+    <div id="result"></div>
+
+    <h2>Registered Users</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Date of Birth</th>
+                <th>Password</th>
+            </tr>
+        </thead>
+
+        <tbody id="userTable"></tbody>
+    </table>
+
+
+    <script>
+
+        // Get users from localStorage
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+
+        // Display existing users
+        displayUsers();
+
+
+        function registerUser(event) {
+
+            // Stop page refresh
+            event.preventDefault();
+
+            // Get input values
+            let name = document.getElementById("name").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let DateofBirth = document.getElementById("dob").value.trim();
+            let password = document.getElementById("password").value.trim();
+
+            // Check empty fields
+            if (name === "" || email === "" || DateofBirth === "" || password === "") {
+
+                document.getElementById("result").innerHTML =
+                    "Please fill in all fields.";
+
+                return;
+            }
+
+
+            // Create user object
+            let user = {
+                name: name,
+                email: email,
+                DOB: DateofBirth,
+                password: password
+            };
+
+            // Add user
+            users.push(user);
+
+            //if editindex is -1,add new user
+            if (editindex ===-1){
+                
+            }
+
+            // Save to localStorage
+            localStorage.setItem("users", JSON.stringify(users));
+
+            // Success message
+            document.getElementById("result").innerHTML =
+                "Registration successful!<br>" +
+                "Welcome, " + name + "<br>" +
+                "Total Users: " + users.length;
+
+            // Update table
+            displayUsers();
+
+            // Clear form
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("dob").value = "";
+            document.getElementById("password").value = "";
+        }
+
+
+        function displayUsers() {
+
+            let table = document.getElementById("userTable");
+
+            // Clear table
+            table.innerHTML = "";
+
+            // Loop through users
+            for (let i = 0; i < users.length; i++) {
+
+                let row = table.insertRow();
+
+                row.insertCell(0).innerHTML = i + 1;
+                row.insertCell(1).innerHTML = users[i].name;
+                row.insertCell(2).innerHTML = users[i].email;
+                row.insertCell(3).innerHTML = users[i].DOB;
+                // Do not display real password
+                row.insertCell(4).innerHTML = "******";
+            }
+        }
+
+    </script>
+
+</body>
+</html>
+```
